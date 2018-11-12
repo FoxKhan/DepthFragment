@@ -21,6 +21,7 @@ class DepthInteractor @Inject constructor() {
 //        if (isAnim) return //TODO fix bug (Completable merge array don't work)
         isAnim = true
         isDepthState = !isDepthState
+        isDepthStateSubject.onNext(isDepthState)
     }
 
     fun depthAnimComplete() {

@@ -25,6 +25,7 @@ class DepthFragmentPresenter : MvpPresenter<DepthFragmentView>() {
         cd += depthInteractor.isDepthStateSubject.subscribe {
             if (it != isDepthState) {
                 isDepthState = !isDepthState
+                viewState.animDepth(it, fragmentRealNumber)
             }
         }
 

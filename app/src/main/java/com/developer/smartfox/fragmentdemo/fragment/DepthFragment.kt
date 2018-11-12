@@ -74,7 +74,7 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
     private fun getFCont(tag: String): Int {
         var count = 0
         activity!!.supportFragmentManager.fragments.forEach {
-            if (it.tag == tag && it.isVisible) count++
+            if (it.tag!!.contains("square") && it.isVisible) count++
         }
         return count
     }
