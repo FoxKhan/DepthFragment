@@ -1,6 +1,7 @@
 package com.developer.smartfox.fragmentdemo.fragment
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,8 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
 
     private val cd = CompositeDisposable()
 
+    lateinit var fab: FloatingActionButton
+
     private lateinit var root: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,8 +32,10 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        fab = view.f_btn_add
+
         view.f_btn_add.setOnClickListener {
-            presenter.addFragmentClick()
+            presenter.addFragmentClick(getFCont("square"))
         }
 
         view.f_btn_delete.setOnClickListener {
@@ -60,8 +65,8 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
 
     private fun setArgs() {
         presenter.fragmentTab = arguments?.getString(TAB) ?: ""
-        presenter.fragmentVisibleNumber = arguments?.getInt(NUMBER) ?: -1
-        presenter.fragmentRealNumber = arguments?.getInt(NUMBER) ?: -1
+        presenter.fragmentTagNumber = arguments?.getInt(NUMBER) ?: -1
+        presenter.fragmentRealNumber = arguments?.getInt(REAL_NUMBER) ?: -1
     }
 
 
@@ -74,20 +79,26 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
     private fun getFCont(tag: String): Int {
         var count = 0
         activity!!.supportFragmentManager.fragments.forEach {
-            if (it.tag!!.contains("square") && it.isVisible) count++
+            if (it.tag!!.contains(tag) && it.isVisible) count++
         }
         return count
+    }
+
+    override fun setAddBtn(isEnable: Boolean) {
+        fab.isEnabled = isEnable
     }
 
     companion object {
         const val TAB = "tab"
         const val NUMBER = "number"
+        const val REAL_NUMBER = "realNumber"
 
-        fun newInstance(tab: String, number: Int): DepthFragment {
+        fun newInstance(tab: String, number: Int, realNumber: Int): DepthFragment {
 
             val args = Bundle()
             args.putString(TAB, tab)
             args.putInt(NUMBER, number)
+            args.putInt(REAL_NUMBER, realNumber)
 
             val fragment = DepthFragment()
             fragment.arguments = args

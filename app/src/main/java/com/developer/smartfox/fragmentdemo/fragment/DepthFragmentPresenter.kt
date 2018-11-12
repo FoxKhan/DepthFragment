@@ -14,7 +14,7 @@ class DepthFragmentPresenter : MvpPresenter<DepthFragmentView>() {
 
     private val depthInteractor = App.graph.depthInteractor
     var fragmentTab: String = ""
-    var fragmentVisibleNumber: Int = -1
+    var fragmentTagNumber: Int = -1
         set(value) {
             viewState.setFragmentNumber(value.toString())
             field = value
@@ -30,14 +30,25 @@ class DepthFragmentPresenter : MvpPresenter<DepthFragmentView>() {
         }
 
         cd += depthInteractor.deleteFragmentSubject.subscribe {
-            if (it.tab == fragmentTab && fragmentVisibleNumber > it.vNumber) {
+            if (it.tab == fragmentTab && fragmentTagNumber > it.vNumber) {
                 fragmentRealNumber--
                 viewState.animDepth(isDepthState, fragmentRealNumber)
             }
         }
 
-//        cd += depthInteractor.addFragmentSubject.subscribe {
+        cd += depthInteractor.focusFragmentTag.subscribe {
+            if (it == fragmentRealNumber) viewState.setAddBtn(true)
+            else viewState.setAddBtn(false)
+        }
+
+//        cd += depthInteractor.popSubject.subscribe {
 //
+//        }
+
+//        cd += depthInteractor.addFragmentSubject.subscribe {
+//            if (it.tab == fragmentTab && it.vNumber == fragmentTagNumber){
+//                viewState.setAddBtn(true)
+//            }else viewState.setAddBtn(false)
 //        }
     }
 
@@ -51,15 +62,15 @@ class DepthFragmentPresenter : MvpPresenter<DepthFragmentView>() {
         cd.clear()
     }
 
-    fun addFragmentClick() {
-        depthInteractor.addFragment(fragmentTab, fragmentVisibleNumber + 1)
+    fun addFragmentClick(fCont: Int) {
+        depthInteractor.addFragment(fragmentTab, fragmentTagNumber + 1, fCont + 1)
     }
 
     fun deleteFragmentClick() {
-        depthInteractor.deleteFragment(fragmentTab, fragmentVisibleNumber)
+        depthInteractor.deleteFragment(fragmentTab, fragmentTagNumber, fragmentRealNumber)
     }
 
     fun popFragmentClick() {
-        depthInteractor.popBackStackFragment(fragmentTab, fragmentVisibleNumber)
+        depthInteractor.popBackStackFragment(fragmentTab, fragmentTagNumber, fragmentRealNumber)
     }
 }

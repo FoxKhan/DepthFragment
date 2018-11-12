@@ -2,6 +2,7 @@ package com.developer.smartfox.fragmentdemo.domain
 
 import com.developer.smartfox.fragmentdemo.model.FragmentInfo
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,9 +13,10 @@ class DepthInteractor @Inject constructor() {
     private var isAnim = false
 
     val isDepthStateSubject = BehaviorSubject.create<Boolean>()
-    val deleteFragmentSubject = BehaviorSubject.create<FragmentInfo>()
-    val addFragmentSubject = BehaviorSubject.create<FragmentInfo>()
-    val popSubject = BehaviorSubject.create<FragmentInfo>()
+    val deleteFragmentSubject = PublishSubject.create<FragmentInfo>()
+    val addFragmentSubject = PublishSubject.create<FragmentInfo>()
+    val popSubject = PublishSubject.create<FragmentInfo>()
+    val focusFragmentTag = BehaviorSubject.create<Int>()
 
 
     fun toggleDepthState() {
@@ -28,15 +30,15 @@ class DepthInteractor @Inject constructor() {
         isAnim = false
     }
 
-    fun addFragment(tab: String, visibleNumber: Int) {
-        addFragmentSubject.onNext(FragmentInfo(tab, visibleNumber))
+    fun addFragment(tab: String, visibleNumber: Int, realNumber: Int) {
+        addFragmentSubject.onNext(FragmentInfo(tab, visibleNumber, realNumber))
     }
 
-    fun popBackStackFragment(tab: String, visibleNumber: Int) {
-        popSubject.onNext(FragmentInfo(tab, visibleNumber))
+    fun popBackStackFragment(tab: String, visibleNumber: Int, realNumber: Int) {
+        popSubject.onNext(FragmentInfo(tab, visibleNumber, realNumber))
     }
 
-    fun deleteFragment(tab: String, number: Int) {
-        deleteFragmentSubject.onNext(FragmentInfo(tab, number))
+    fun deleteFragment(tab: String, number: Int, realNumber: Int) {
+        deleteFragmentSubject.onNext(FragmentInfo(tab, number, realNumber))
     }
 }

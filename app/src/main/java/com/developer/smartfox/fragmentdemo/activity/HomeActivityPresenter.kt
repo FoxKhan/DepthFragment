@@ -20,7 +20,15 @@ class HomeActivityPresenter : MvpPresenter<HomeActivityView>() {
         }
 
         cd += depthInteractor.addFragmentSubject.subscribe {
-            viewState.addFragment(it.tab, it.vNumber)
+            viewState.addFragment(it.tab, it.vNumber, it.realNumber)
+        }
+
+        cd += depthInteractor.deleteFragmentSubject.subscribe {
+            viewState.deleteFragment(it.tab, it.vNumber, it.realNumber)
+        }
+
+        cd += depthInteractor.popSubject.subscribe {
+            viewState.popBackStackByTag(it.tab, it.vNumber, it.realNumber)
         }
     }
 
@@ -38,7 +46,11 @@ class HomeActivityPresenter : MvpPresenter<HomeActivityView>() {
         cd.clear()
     }
 
-    fun onFragmentDelete(tab: String, number: Int) {
-        depthInteractor.deleteFragment(tab, number)
+    fun onFragmentDelete(tab: String, number: Int, realNumber: Int) {
+        depthInteractor.deleteFragment(tab, number, realNumber)
+    }
+
+    fun onChangeFocusFragment(focusFragmentTag: Int) {
+        depthInteractor.focusFragmentTag.onNext(focusFragmentTag)
     }
 }

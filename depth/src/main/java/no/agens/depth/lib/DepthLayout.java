@@ -2,12 +2,7 @@ package no.agens.depth.lib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Outline;
-import android.graphics.Paint;
-import android.graphics.PointF;
+import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -206,7 +201,7 @@ public class DepthLayout extends RelativeLayout {
 
     public void setCustomShadowElevation(float customShadowElevation) {
         this.customShadowElevation = customShadowElevation;
-        ((View) getParent()).invalidate();
+//        ((View) getParent()).invalidate();
     }
 
     public float getCustomShadowElevation() {

@@ -10,4 +10,5 @@ interface DepthFragmentView : MvpView {
     fun animDepth(isDepthState: Boolean, fragmentNumber : Int)
 
     fun setFragmentNumber(number : String)
+    fun setAddBtn(isEnable: Boolean)
 }

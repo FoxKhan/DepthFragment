@@ -12,6 +12,8 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
     @InjectPresenter
     lateinit var presenter: HomeActivityPresenter
 
+    private val fragmentContainer: Int = R.id.fragment_container
+
     private val fm = supportFragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,8 +25,13 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
         val tab = "square"
 
         for (i in 1..6) {
-            addFragment(tab, i)
+            addFragment(tab, i, i)
         }
+
+//        fm.addOnBackStackChangedListener {
+//            val backStackEntryCount = fm.backStackEntryCount
+//            presenter.onChangeFocusFragment(fm.backStackEntryCount)
+//        } // TODO how getEntryCountListener
 
     }
 
@@ -34,8 +41,8 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
     }
 
     private fun initView() {
-        navigation_view.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
+        navigation_view.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
                 R.id.navigation_square -> {
 
                 }
@@ -43,9 +50,7 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
 
                 }
                 R.id.navigation_triangle -> {
-                    val fragment = supportFragmentManager.findFragmentByTag("square 2")
-                    supportFragmentManager.beginTransaction().remove(fragment!!).commit()
-                    presenter.onFragmentDelete("square", 2)
+
                 }
             }
             true
@@ -66,38 +71,53 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
         presenter.onStop()
     }
 
-
     //navigator in miniature
-    override fun deleteFragment(tab: String, vNumber: Int) {
+    override fun deleteFragment(tab: String, vNumber: Int, realNumber: Int) {
         val fragment = fm.findFragmentByTag("$tab $vNumber")
-        fragment?.let { fm.beginTransaction().remove(it).commit() }
+        fragment?.let {
+            fm.beginTransaction()
+                .remove(it)
+                .commit()
+//            fm.popBackStack()
+        }
+        //TODO how remove with clean backStack
     }
 
-    override fun addFragment(tab: String, vNumber: Int) {
+    override fun addFragment(tab: String, vNumber: Int, realNumber: Int) {
         val tag = "$tab $vNumber"
         fm.beginTransaction()
-            .add(R.id.fragment_container, DepthFragment.newInstance(tab, vNumber), tag)
+//            .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right) //lol
+//            .setCustomAnimations(R.animator.fragment_in, R.animator.fragment_in)
+            .add(fragmentContainer, DepthFragment.newInstance(tab, vNumber, realNumber), tag)
+            .addToBackStack(tag)
+//            .setTransition()
+
+            .commit()
+
+    }
+
+    override fun replaceFragmentWithBackStack(tab: String, vNumber: Int, realNumber: Int) {
+        val tag = "$tab $vNumber"
+        fm.beginTransaction()
+            .replace(fragmentContainer, DepthFragment.newInstance(tab, vNumber, realNumber), tag)
             .addToBackStack(tag)
             .commit()
     }
 
-    override fun replaceFragmentWithBackStack(tab: String, vNumber: Int) {
+    override fun replaceFragment(tab: String, vNumber: Int, realNumber: Int) {
         val tag = "$tab $vNumber"
         fm.beginTransaction()
-            .replace(R.id.fragment_container, DepthFragment.newInstance(tab, vNumber), tag)
-            .addToBackStack(tag)
+            .replace(fragmentContainer, DepthFragment.newInstance(tab, vNumber, realNumber), tag)
             .commit()
     }
 
-    override fun replaceFragment(tab: String, vNumber: Int) {
+    override fun popBackStackByTag(tab: String, vNumber: Int, realNumber: Int) {
         val tag = "$tab $vNumber"
-        fm.beginTransaction()
-            .replace(R.id.fragment_container, DepthFragment.newInstance(tab, vNumber), tag)
-            .commit()
+        fm.popBackStack(tag, fragmentContainer)
     }
 
-    override fun popBackStackByTag(tab: String, vNumber: Int) {
-        val tag = "$tab $vNumber"
-        fm.popBackStack(tag, R.id.fragment_container)
+    override fun onBackPressed() {
+        if (fm.backStackEntryCount <= 1) finish()
+        super.onBackPressed()
     }
 }
