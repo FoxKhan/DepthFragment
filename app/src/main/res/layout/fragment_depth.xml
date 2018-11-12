@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<no.agens.depth.lib.DepthLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    app:custom_elevation="6dp"
+    app:edge_color="@color/colorPrimary"
+    tools:context=".activity.MainActivity"
+    tools:ignore="ContentDescription">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fragment_btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="normal"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_add"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/fragment_btn_margin"
+        android:layout_marginEnd="@dimen/fragment_btn_margin"
+        android:layout_marginBottom="@dimen/fragment_btn_margin"
+        android:background="@drawable/shape_fragment_btn_menu"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/f_txt_number"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/fragment_btn_size"
+            android:layout_gravity="start"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:paddingStart="@dimen/fragment_btn_padding"
+            android:paddingEnd="@dimen/fragment_btn_padding"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp"
+            tools:text="5" />
+
+        <ImageView
+            android:id="@+id/f_btn_2"
+            style="@style/FragmentBtn"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_location" />
+
+        <ImageView
+            android:id="@+id/f_btn_delete"
+            style="@style/FragmentBtn"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_delete" />
+    </FrameLayout>
+
+
+</no.agens.depth.lib.DepthLayout>
