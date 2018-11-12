@@ -29,10 +29,8 @@ object KotlinTransitionHelper {
     private val VALUE_INTERPOLATOR = QuintOut()
     private val INTERPOLATOR = CustomInterpolator()
 
-    private const val FIRST_DELAY = 300
 
-
-    fun startMenuAnimate(root: View, fCount: Int, fragmentNumber: Int): Completable {
+    fun startMenuAnimate(root: View, fragmentNumber: Int): Completable {
 
         return menuAnimate(
             root.findViewById<View>(R.id.fragment_root) as DepthLayout,

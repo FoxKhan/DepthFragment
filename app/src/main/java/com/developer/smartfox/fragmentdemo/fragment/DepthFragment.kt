@@ -24,26 +24,31 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         root = inflater.inflate(R.layout.fragment_depth, container, false)
         setArgs()
-
-
-
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        view.fragment_btn_add.setOnClickListener {
+        view.f_btn_add.setOnClickListener {
             presenter.addFragmentClick()
+        }
+
+        view.f_btn_delete.setOnClickListener {
+            presenter.deleteFragmentClick()
+        }
+
+        view.f_btn_pop.setOnClickListener {
+            presenter.popFragmentClick()
         }
     }
 
-    override fun animDepth(isDepthState: Pair<Boolean, Int>, fragmentNumber: Int) {
+    override fun animDepth(isDepthState: Boolean, fragmentNumber: Int) {
         if (fragmentNumber == -1) return
-        cd += if (isDepthState.first) {
-            KotlinTransitionHelper.startMenuAnimate(root, isDepthState.second, fragmentNumber)
+        cd += if (isDepthState) {
+            KotlinTransitionHelper.startMenuAnimate(root, fragmentNumber)
                 .subscribe { presenter.depthAnimComplete() }
         } else {
-            KotlinTransitionHelper.startRevertFromMenu(root, isDepthState.second, fragmentNumber)
+            KotlinTransitionHelper.startRevertFromMenu(root, getFCont("square"), fragmentNumber)
                 .subscribe { presenter.depthAnimComplete() }
         }
     }
@@ -64,6 +69,14 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
         super.onStop()
         cd.dispose()
         cd.clear()
+    }
+
+    private fun getFCont(tag: String): Int {
+        var count = 0
+        activity!!.supportFragmentManager.fragments.forEach {
+            if (it.tag == tag && it.isVisible) count++
+        }
+        return count
     }
 
     companion object {

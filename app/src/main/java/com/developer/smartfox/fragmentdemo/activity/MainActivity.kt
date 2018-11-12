@@ -28,8 +28,8 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
 
     }
 
-    override fun animMenu(pair: Pair<Boolean, Int>) {
-        val stateSet = intArrayOf(android.R.attr.state_checked * if (pair.first) 1 else -1)
+    override fun animMenu(isDepthState: Boolean) {
+        val stateSet = intArrayOf(android.R.attr.state_checked * if (isDepthState) 1 else -1)
         btn_menu.setImageState(stateSet, true)
     }
 
@@ -56,7 +56,7 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
             supportFragmentManager.fragments.forEach { fragment ->
                 if (fragment.tag?.contains("square") == true && fragment.isVisible) visibleFragmentsCount++
             }
-            presenter.onMenuClick(visibleFragmentsCount)
+            presenter.onMenuClick()
         }
 
     }

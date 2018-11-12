@@ -7,7 +7,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface DepthFragmentView : MvpView {
 
-    fun animDepth(isDepthState: Pair<Boolean, Int>, fragmentNumber : Int)
+    fun animDepth(isDepthState: Boolean, fragmentNumber : Int)
 
     fun setFragmentNumber(number : String)
 }

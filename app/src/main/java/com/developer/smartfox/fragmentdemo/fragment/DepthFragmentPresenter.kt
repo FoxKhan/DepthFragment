@@ -23,17 +23,23 @@ class DepthFragmentPresenter : MvpPresenter<DepthFragmentView>() {
 
     override fun onFirstViewAttach() {
         cd += depthInteractor.isDepthStateSubject.subscribe {
-            if (it.first != isDepthState) {
-                viewState.animDepth(it, fragmentRealNumber)
+            if (it != isDepthState) {
                 isDepthState = !isDepthState
             }
         }
 
         cd += depthInteractor.deleteFragmentSubject.subscribe {
-            if (it.first == fragmentTab && fragmentVisibleNumber > it.second)
+            if (it.tab == fragmentTab && fragmentVisibleNumber > it.vNumber) {
                 fragmentRealNumber--
+                viewState.animDepth(isDepthState, fragmentRealNumber)
+            }
         }
+
+//        cd += depthInteractor.addFragmentSubject.subscribe {
+//
+//        }
     }
+
 
     fun depthAnimComplete() {
         depthInteractor.depthAnimComplete()
@@ -46,5 +52,13 @@ class DepthFragmentPresenter : MvpPresenter<DepthFragmentView>() {
 
     fun addFragmentClick() {
         depthInteractor.addFragment(fragmentTab, fragmentVisibleNumber + 1)
+    }
+
+    fun deleteFragmentClick() {
+        depthInteractor.deleteFragment(fragmentTab, fragmentVisibleNumber)
+    }
+
+    fun popFragmentClick() {
+        depthInteractor.popBackStackFragment(fragmentTab, fragmentVisibleNumber)
     }
 }

@@ -20,12 +20,12 @@ class HomeActivityPresenter : MvpPresenter<HomeActivityView>() {
         }
 
         cd += depthInteractor.addFragmentSubject.subscribe {
-            viewState.addFragment(it.first, it.second)
+            viewState.addFragment(it.tab, it.vNumber)
         }
     }
 
-    fun onMenuClick(fragmentsCount : Int) {
-        depthInteractor.toggleDepthState(fragmentsCount)
+    fun onMenuClick() {
+        depthInteractor.toggleDepthState()
     }
 
     fun onStop() {
@@ -39,6 +39,6 @@ class HomeActivityPresenter : MvpPresenter<HomeActivityView>() {
     }
 
     fun onFragmentDelete(tab: String, number: Int) {
-        depthInteractor.onDeleteFragment(tab, number)
+        depthInteractor.deleteFragment(tab, number)
     }
 }

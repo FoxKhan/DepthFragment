@@ -8,7 +8,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 interface HomeActivityView : MvpView {
 
 
-    fun animMenu(pair: Pair<Boolean, Int>)
+    fun animMenu(isDepthState: Boolean)
 
     fun deleteFragment(tab: String, vNumber: Int)
 

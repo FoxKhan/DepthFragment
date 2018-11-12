@@ -1,5 +1,6 @@
 package com.developer.smartfox.fragmentdemo.domain
 
+import com.developer.smartfox.fragmentdemo.model.FragmentInfo
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -10,20 +11,16 @@ class DepthInteractor @Inject constructor() {
     private var isDepthState = false
     private var isAnim = false
 
-    val isDepthStateSubject = BehaviorSubject.create<Pair<Boolean, Int>>()
-    val deleteFragmentSubject = BehaviorSubject.create<Pair<String, Int>>()
-    val addFragmentSubject = BehaviorSubject.create<Pair<String, Int>>()
+    val isDepthStateSubject = BehaviorSubject.create<Boolean>()
+    val deleteFragmentSubject = BehaviorSubject.create<FragmentInfo>()
+    val addFragmentSubject = BehaviorSubject.create<FragmentInfo>()
+    val popSubject = BehaviorSubject.create<FragmentInfo>()
 
 
-    fun toggleDepthState(fragmentsCount: Int) {
+    fun toggleDepthState() {
 //        if (isAnim) return //TODO fix bug (Completable merge array don't work)
         isAnim = true
         isDepthState = !isDepthState
-        isDepthStateSubject.onNext(Pair(isDepthState, fragmentsCount))
-    }
-
-    fun onDeleteFragment(tab: String, number: Int) {
-        deleteFragmentSubject.onNext(Pair(tab, number))
     }
 
     fun depthAnimComplete() {
@@ -31,6 +28,14 @@ class DepthInteractor @Inject constructor() {
     }
 
     fun addFragment(tab: String, visibleNumber: Int) {
-        addFragmentSubject.onNext(Pair(tab, visibleNumber))
+        addFragmentSubject.onNext(FragmentInfo(tab, visibleNumber))
+    }
+
+    fun popBackStackFragment(tab: String, visibleNumber: Int) {
+        popSubject.onNext(FragmentInfo(tab, visibleNumber))
+    }
+
+    fun deleteFragment(tab: String, number: Int) {
+        deleteFragmentSubject.onNext(FragmentInfo(tab, number))
     }
 }

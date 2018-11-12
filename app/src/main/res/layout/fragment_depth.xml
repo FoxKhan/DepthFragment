@@ -12,7 +12,7 @@
     tools:ignore="ContentDescription">
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fragment_btn_add"
+        android:id="@+id/f_btn_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fabSize="normal"
@@ -49,7 +49,7 @@
             tools:text="5" />
 
         <ImageView
-            android:id="@+id/f_btn_2"
+            android:id="@+id/f_btn_pop"
             style="@style/FragmentBtn"
             android:layout_gravity="center"
             android:src="@drawable/ic_location" />
