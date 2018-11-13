@@ -8,7 +8,7 @@
     android:background="@color/colorBackground"
     app:custom_elevation="6dp"
     app:edge_color="@color/colorPrimary"
-    tools:context=".activity.MainActivity"
+    tools:context=".activity.HomeActivity"
     tools:ignore="ContentDescription">
 
     <android.support.design.widget.FloatingActionButton

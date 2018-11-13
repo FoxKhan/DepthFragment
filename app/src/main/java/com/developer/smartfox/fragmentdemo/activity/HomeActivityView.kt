@@ -11,18 +11,5 @@ interface HomeActivityView : MvpView {
 
     fun animMenu(isDepthState: Boolean)
 
-    @StateStrategyType(SingleStateStrategy::class)
-    fun deleteFragment(tab: String, vNumber: Int, realNumber: Int)
-
-    @StateStrategyType(SingleStateStrategy::class)
-    fun addFragment(tab: String, vNumber: Int, realNumber: Int)
-
-    @StateStrategyType(SingleStateStrategy::class)
-    fun replaceFragmentWithBackStack(tab: String, vNumber: Int, realNumber: Int)
-
-    @StateStrategyType(SingleStateStrategy::class)
-    fun replaceFragment(tab: String, vNumber: Int, realNumber: Int)
-
-    @StateStrategyType(SingleStateStrategy::class)
-    fun popBackStackByTag(tab: String, vNumber: Int, realNumber: Int)
+    fun replaceFragment(tab: String)
 }

@@ -1,4 +1,4 @@
-package com.developer.smartfox.fragmentdemo.fragment
+package com.developer.smartfox.fragmentdemo.fragment.depth
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy

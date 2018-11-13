@@ -82,14 +82,14 @@ object KotlinTransitionHelper {
             .buildCompletable()
 
         val rotationAnim = AnimationBuilder.forView(target)
-            .rotation(rotation)
+            .rotation(rotation) //one line
             .duration(1500L)
             .startDelay(delay)
             .interpolator(INTERPOLATOR)
             .buildCompletable()
 
         val translationY = AnimationBuilder.forView(target)
-            .translationY(-moveY * dp * 3)
+            .translationY(-moveY * dp * 3) // one line
             .duration(subtractDelay)
             .startDelay(delay)
             .interpolator(INTERPOLATOR)

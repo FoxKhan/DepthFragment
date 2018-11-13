@@ -1,4 +1,4 @@
-package com.developer.smartfox.fragmentdemo.fragment
+package com.developer.smartfox.fragmentdemo.fragment.depth
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -12,6 +12,7 @@ import com.developer.smartfox.fragmentdemo.common.KotlinTransitionHelper
 import com.developer.smartfox.fragmentdemo.common.plusAssign
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_depth.view.*
+import no.agens.depth.lib.DepthLayout
 
 class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
 
@@ -27,6 +28,19 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         root = inflater.inflate(R.layout.fragment_depth, container, false)
         setArgs()
+
+        val target = root.findViewById<DepthLayout>(R.id.fragment_container)
+        val dp = target.resources.displayMetrics.density
+        target.also {
+            it.scaleX = 0.5f
+            it.scaleY = 0.5f
+            it.rotationX = 60f
+            it.rotation = -50f
+            it.translationY = 10 * dp
+            it.customShadowElevation = 10 * dp //todo check it (cable is non)
+        }
+
+
         return root
     }
 

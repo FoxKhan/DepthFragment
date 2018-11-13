@@ -4,10 +4,12 @@ import android.os.Bundle
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.developer.smartfox.fragmentdemo.R
-import com.developer.smartfox.fragmentdemo.fragment.DepthFragment
+import com.developer.smartfox.fragmentdemo.fragment.childroot.ChildRootFragment
+import com.developer.smartfox.fragmentdemo.fragment.depth.DepthFragment
+import com.developer.smartfox.fragmentdemo.navigator.NavigatorHolder
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : MvpAppCompatActivity(), HomeActivityView {
+class HomeActivity : MvpAppCompatActivity(), HomeActivityView {
 
     @InjectPresenter
     lateinit var presenter: HomeActivityPresenter
@@ -22,17 +24,10 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
 
         initView()
 
-        val tab = "square"
-
-        for (i in 1..6) {
-            addFragment(tab, i, i)
-        }
-
 //        fm.addOnBackStackChangedListener {
 //            val backStackEntryCount = fm.backStackEntryCount
 //            presenter.onChangeFocusFragment(fm.backStackEntryCount)
 //        } // TODO how getEntryCountListener
-
     }
 
     override fun animMenu(isDepthState: Boolean) {
@@ -44,13 +39,13 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
         navigation_view.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_square -> {
-
+                    presenter.btmTabClick(NavigatorHolder.SQUARE)
                 }
                 R.id.navigation_circle -> {
-
+                    presenter.btmTabClick(NavigatorHolder.CIRCLE)
                 }
                 R.id.navigation_triangle -> {
-
+                    presenter.btmTabClick(NavigatorHolder.TRIANGLE)
                 }
             }
             true
@@ -63,7 +58,6 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
             }
             presenter.onMenuClick()
         }
-
     }
 
     override fun onStop() {
@@ -72,52 +66,10 @@ class MainActivity : MvpAppCompatActivity(), HomeActivityView {
     }
 
     //navigator in miniature
-    override fun deleteFragment(tab: String, vNumber: Int, realNumber: Int) {
-        val fragment = fm.findFragmentByTag("$tab $vNumber")
-        fragment?.let {
-            fm.beginTransaction()
-                .remove(it)
-                .commit()
-//            fm.popBackStack()
-        }
-        //TODO how remove with clean backStack
-    }
-
-    override fun addFragment(tab: String, vNumber: Int, realNumber: Int) {
-        val tag = "$tab $vNumber"
+    override fun replaceFragment(tab: String) {
+        val fragment = fm.findFragmentByTag(tab) ?: ChildRootFragment.newInstance(tab)
         fm.beginTransaction()
-//            .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right) //lol
-//            .setCustomAnimations(R.animator.fragment_in, R.animator.fragment_in)
-            .add(fragmentContainer, DepthFragment.newInstance(tab, vNumber, realNumber), tag)
-            .addToBackStack(tag)
-//            .setTransition()
-
+            .replace(fragmentContainer, fragment, tab)
             .commit()
-
-    }
-
-    override fun replaceFragmentWithBackStack(tab: String, vNumber: Int, realNumber: Int) {
-        val tag = "$tab $vNumber"
-        fm.beginTransaction()
-            .replace(fragmentContainer, DepthFragment.newInstance(tab, vNumber, realNumber), tag)
-            .addToBackStack(tag)
-            .commit()
-    }
-
-    override fun replaceFragment(tab: String, vNumber: Int, realNumber: Int) {
-        val tag = "$tab $vNumber"
-        fm.beginTransaction()
-            .replace(fragmentContainer, DepthFragment.newInstance(tab, vNumber, realNumber), tag)
-            .commit()
-    }
-
-    override fun popBackStackByTag(tab: String, vNumber: Int, realNumber: Int) {
-        val tag = "$tab $vNumber"
-        fm.popBackStack(tag, fragmentContainer)
-    }
-
-    override fun onBackPressed() {
-        if (fm.backStackEntryCount <= 1) finish()
-        super.onBackPressed()
     }
 }
