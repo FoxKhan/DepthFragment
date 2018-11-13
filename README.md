@@ -7,3 +7,5 @@
 * [Dagger 2]() - di
 * [MVP Moxy]() - mvp
 * [RxJava]() - Reactive programming
+
+<img src="https://image.ibb.co/jPvuKf/photo-2018-11-13-15-24-37.jpg" width="350"/>
