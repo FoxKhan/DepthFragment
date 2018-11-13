@@ -1,11 +1,11 @@
 package com.developer.smartfox.fragmentdemo.activity
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.developer.smartfox.fragmentdemo.R
 import com.developer.smartfox.fragmentdemo.fragment.childroot.ChildRootFragment
-import com.developer.smartfox.fragmentdemo.fragment.depth.DepthFragment
 import com.developer.smartfox.fragmentdemo.navigator.NavigatorHolder
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -66,10 +66,35 @@ class HomeActivity : MvpAppCompatActivity(), HomeActivityView {
     }
 
     //navigator in miniature
-    override fun replaceFragment(tab: String) {
-        val fragment = fm.findFragmentByTag(tab) ?: ChildRootFragment.newInstance(tab)
-        fm.beginTransaction()
-            .replace(fragmentContainer, fragment, tab)
+    override fun selectTab(tab: String) {
+
+        val currentFragment = getCurrentFragment()
+        if (currentFragment != null && currentFragment?.tag == tab) return
+        if (currentFragment != null) fm.beginTransaction().hide(currentFragment!!).commit()
+
+
+        val fragment = fm.findFragmentByTag(tab)
+        if (fragment == null)
+            fm.beginTransaction()
+                .add(fragmentContainer, ChildRootFragment.newInstance(tab), tab)
+                .commit()
+        else fm.beginTransaction()
+            .show(fragment)
             .commit()
+    }
+
+    private fun getCurrentFragment(): Fragment? {
+        fm.fragments.forEach {
+            if (it.isVisible) return it
+        }
+        return null
+    }
+
+    override fun onBackPressed() {
+        presenter.onBackPressed(getCurrentFragment()?.tag ?: "")
+    }
+
+    override fun finishApp(){
+        finish()
     }
 }

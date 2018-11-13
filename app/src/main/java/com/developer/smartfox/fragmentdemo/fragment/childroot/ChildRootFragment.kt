@@ -13,16 +13,16 @@ import com.developer.smartfox.fragmentdemo.navigator.Navigator
 
 class ChildRootFragment : MvpAppCompatFragment() , ChildRootFragmentView {
 
+    private lateinit var navigator: Navigator
+
     @InjectPresenter
     lateinit var presenter: ChildRootFragmentPresenter
 
     @ProvidePresenter
     fun providePresenter(): ChildRootFragmentPresenter {
 
-        val navigator: Navigator
         if (arguments != null && arguments?.getString(TAB) != null) {
             navigator = navHolder.getNavigator(
-                R.id.fragment_container, childFragmentManager,
                 arguments?.getString(TAB)!!
             )
         } else throw Exception("tab arg is absent")
@@ -37,6 +37,18 @@ class ChildRootFragment : MvpAppCompatFragment() , ChildRootFragmentView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_child_root, container, false)
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        navigator.initNavigator(R.id.fragment_container, childFragmentManager)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        navigator.deInit()
+    }
 
     companion object {
         const val TAB = "tab"

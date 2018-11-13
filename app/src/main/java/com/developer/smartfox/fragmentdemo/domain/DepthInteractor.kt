@@ -17,6 +17,8 @@ class DepthInteractor @Inject constructor() {
     val addFragmentSubject = PublishSubject.create<FragmentInfo>()
     val popSubject = PublishSubject.create<FragmentInfo>()
     val focusFragmentTag = BehaviorSubject.create<Int>()
+    val backPressedSubject = PublishSubject.create<String>()
+    val finishSubject = PublishSubject.create<Unit>()
 
 
     fun toggleDepthState() {

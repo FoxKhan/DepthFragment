@@ -2,6 +2,7 @@ package com.developer.smartfox.fragmentdemo.fragment.depth
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.developer.smartfox.fragmentdemo.R
 import com.developer.smartfox.fragmentdemo.common.KotlinTransitionHelper
 import com.developer.smartfox.fragmentdemo.common.plusAssign
+import com.developer.smartfox.fragmentdemo.navigator.NavigatorHolder
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_depth.view.*
-import no.agens.depth.lib.DepthLayout
 
 class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
 
@@ -29,16 +30,16 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
         root = inflater.inflate(R.layout.fragment_depth, container, false)
         setArgs()
 
-        val target = root.findViewById<DepthLayout>(R.id.fragment_container)
-        val dp = target.resources.displayMetrics.density
-        target.also {
-            it.scaleX = 0.5f
-            it.scaleY = 0.5f
-            it.rotationX = 60f
-            it.rotation = -50f
-            it.translationY = 10 * dp
-            it.customShadowElevation = 10 * dp //todo check it (cable is non)
-        }
+//        val target = root.findViewById<View>(R.id.fragment_root) as DepthLayout
+//        val dp = target.resources.displayMetrics.density
+//        target.also {
+//            it.scaleX = 0.5f
+//            it.scaleY = 0.5f
+//            it.rotationX = 60f
+//            it.rotation = -50f
+//            it.translationY = 10 * dp
+//            it.customShadowElevation = 10 * dp //todo check it (cable is non)
+//        }
 
 
         return root
@@ -49,7 +50,7 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
         fab = view.f_btn_add
 
         view.f_btn_add.setOnClickListener {
-            presenter.addFragmentClick(getFCont("square"))
+            presenter.addFragmentClick(getFCont())
         }
 
         view.f_btn_delete.setOnClickListener {
@@ -67,7 +68,7 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
             KotlinTransitionHelper.startMenuAnimate(root, fragmentNumber)
                 .subscribe { presenter.depthAnimComplete() }
         } else {
-            KotlinTransitionHelper.startRevertFromMenu(root, getFCont("square"), fragmentNumber)
+            KotlinTransitionHelper.startRevertFromMenu(root, getFCont(), fragmentNumber)
                 .subscribe { presenter.depthAnimComplete() }
         }
     }
@@ -90,12 +91,14 @@ class DepthFragment : MvpAppCompatFragment(), DepthFragmentView {
         cd.clear()
     }
 
-    private fun getFCont(tag: String): Int {
-        var count = 0
-        activity!!.supportFragmentManager.fragments.forEach {
-            if (it.tag!!.contains(tag) && it.isVisible) count++
-        }
-        return count
+    override fun onResume() {
+        super.onResume()
+        Log.d("SDS", "onResume: $tag")
+    }
+
+    private fun getFCont(): Int {
+        if (tag!!.contains(NavigatorHolder.CIRCLE)) return 0
+        return parentFragment!!.childFragmentManager.fragments.size
     }
 
     override fun setAddBtn(isEnable: Boolean) {

@@ -1,6 +1,5 @@
 package com.developer.smartfox.fragmentdemo.navigator
 
-import android.support.v4.app.FragmentManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -9,7 +8,7 @@ class NavigatorHolder @Inject constructor() {
 
     private val navigators = HashMap<String, Navigator>()
 
-    fun getNavigator(container: Int, fm: FragmentManager, tab: String): Navigator {
+    fun getNavigator(tab: String): Navigator {
 
         var token = false
         navigators.forEach {
@@ -18,7 +17,7 @@ class NavigatorHolder @Inject constructor() {
 
         return if (token) navigators[tab]!!
         else {
-            navigators[tab] = Navigator(container, fm, tab)
+            navigators[tab] = Navigator( tab)
             navigators[tab]!!
         }
     }

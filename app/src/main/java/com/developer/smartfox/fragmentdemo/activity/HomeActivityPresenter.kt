@@ -4,17 +4,11 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.developer.smartfox.fragmentdemo.App
 import com.developer.smartfox.fragmentdemo.common.plusAssign
-import com.developer.smartfox.fragmentdemo.navigator.Navigator
 import com.developer.smartfox.fragmentdemo.navigator.NavigatorHolder
 import io.reactivex.disposables.CompositeDisposable
 
 @InjectViewState
 class HomeActivityPresenter : MvpPresenter<HomeActivityView>() {
-
-    init {
-        viewState.replaceFragment(NavigatorHolder.SQUARE)
-    }
-
 
     private val depthInteractor = App.graph.depthInteractor
 
@@ -26,6 +20,12 @@ class HomeActivityPresenter : MvpPresenter<HomeActivityView>() {
         cd += depthInteractor.isDepthStateSubject.subscribe {
             viewState.animMenu(it)
         }
+
+        cd += depthInteractor.finishSubject.subscribe {
+            viewState.finishApp()
+        }
+
+        viewState.selectTab(NavigatorHolder.SQUARE)
     }
 
     fun onMenuClick() {
@@ -51,7 +51,10 @@ class HomeActivityPresenter : MvpPresenter<HomeActivityView>() {
     }
 
     fun btmTabClick(tab: String) {
+        viewState.selectTab(tab)
+    }
 
-        viewState
+    fun onBackPressed(tab: String) {
+        depthInteractor.backPressedSubject.onNext(tab)
     }
 }

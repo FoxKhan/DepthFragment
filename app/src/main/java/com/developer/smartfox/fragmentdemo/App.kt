@@ -19,4 +19,6 @@ class App : Application() {
         lateinit var graph: AppComponent
             private set
     }
+
+    //TODO onBackInApp observable dismiss
 }

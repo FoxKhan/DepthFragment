@@ -7,7 +7,6 @@ import com.pspdfkit.labs.vangogh.api.AnimationSchedulers
 import com.pspdfkit.labs.vangogh.base.AnimationBuilder
 import io.reactivex.Completable
 import no.agens.depth.lib.DepthLayout
-import no.agens.depth.lib.tween.interpolators.QuintOut
 import kotlin.random.Random
 
 object KotlinTransitionHelper {
@@ -26,7 +25,7 @@ object KotlinTransitionHelper {
 
 
     private const val DURATION = 1100
-    private val VALUE_INTERPOLATOR = QuintOut()
+    private val VALUE_INTERPOLATOR = CustomInterpolator()
     private val INTERPOLATOR = CustomInterpolator()
 
 
@@ -45,11 +44,15 @@ object KotlinTransitionHelper {
     }
 
     fun startRevertFromMenu(root: View, fCount: Int, fragmentNumber: Int): Completable {
+
+        val delay = if (fCount >= 1) Random.nextLong(0, 50) + (fCount - fragmentNumber) * 25
+        else Random.nextLong(0, 50)
+
         return menuAnimate(
             root.findViewById<View>(R.id.fragment_root) as DepthLayout,
             0f,
             10F,
-            Random.nextLong(0, 50) + (fCount - fragmentNumber) * 25,
+            delay,
             Random.nextLong(0, 25),
             START_SCALE,
             START_ROTATION,
